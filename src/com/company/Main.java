@@ -100,14 +100,23 @@ public class Main {
                     User Us2 = new User(UserState.New, password, id, Cust2);
                     Account Ac2 = new Account(id, billing_address, false, 0, Cust2, null);
                     ShopingCart Shp2 = new ShopingCart(Ac2.getOpen(), Us2, Ac2);
-                    Cust.setAccount(Ac2);
-                    Cust.setUser(Us2);
-                    Shp.setAccount(Ac2);
-                    Ac.setShopingCart(Shp2);
+                    Cust2.setAccount(Ac2);
+                    Cust2.setUser(Us2);
+                    Shp2.setAccount(Ac2);
+                    Ac2.setShopingCart(Shp2);
                     Users.add(Us2);
                     accounts.add(Ac2);
                     for (int i = 0; i < Users.size(); i++) {
                         System.out.println(Users.get(i));
+                    }
+                    for (int i = 0; i < products.size(); i++) {
+                        System.out.println(products.get(i));
+                    }
+                    for (int i = 0; i < accounts.size(); i++) {
+                        System.out.println(accounts.get(i));
+                    }
+                    for (int i = 0; i < suppliers.size(); i++) {
+                        System.out.println(suppliers.get(i));
                     }
 
 
@@ -120,7 +129,8 @@ public class Main {
                     // also the account,customer and shopping cart associated with the deleted user
                     System.out.println(Users.size());
                     for (int i = 0; i < Users.size(); i++) {
-                        if (Users.get(i).getLogin_id().equals(id)){
+                        if (Users.get(i).getLogin_id().equals(id)) {
+                            Users.get(i).getCustomer().getAccount().setClosed(new java.sql.Date(System.currentTimeMillis()));
                             Users.get(i).delete();
                             Users.remove(i);
 
@@ -154,11 +164,9 @@ public class Main {
                         if (!found) {
                             System.out.println("User does not exist");
                         }
-                    }
-                    else {
+                    } else {
                         System.out.println("User already logged in");
                     }
-
 
 
                     System.out.println(loggedInUser);
@@ -171,40 +179,68 @@ public class Main {
                     System.out.println("Enter User ID");
                     id = input.next();
                     //check if user is logged in and if he is change LoggedINuser to null
-                    if(loggedInUser.getLogin_id().equals(id)) {
-                        loggedInUser=null;
+                    if (loggedInUser.getLogin_id().equals(id)) {
+                        loggedInUser = null;
                         System.out.println("User with id " + id + " succesfuly logged out");
-                    }
-                    else {
+                    } else {
                         System.out.println("User with id" + id + " is not logged in");
                     }
 
 
-
-
-
-
-
                 case 5:
                     //create new order
-                    if(loggedInUser!=null) {
+                    //check if there is a user logged in and if there is go to his account and add the order
+                    if (loggedInUser != null) {
                         System.out.println("Please enter address to send to ");
                         address = input.next();
                         numoforders++;
                         loggedInUser.getCustomer().getAccount().addOrder(numoforders.toString(), null, new Address(address));
-                        System.out.println("the order number is " + loggedInUser.getCustomer().getAccount().getOrder(0));
+                        System.out.println("the order number is " + numoforders.toString());
 
 
-                    }
+
+                        }
+
                     else {
                         System.out.println("no User logged in");
                     }
 
 
+
+                    System.out.println("number of orders are" + numoforders.toString());
+
+
                             break;
 
                 case 6:
-                            //Add user
+                    System.out.println("Please enter Order ID ");
+                    String orderid = input.next();
+                    System.out.println("Please enter UserId to purchase from ");
+                    String userid = input.next();
+                    System.out.println("Please enter product to purchase ");
+                    String product_name = input.next();
+                    User purchasefrom = null;
+                    Product product=null;
+                    if(loggedInUser!=null) {
+                        for (int i = 0; i < Users.size(); i++) {
+                            if (Users.get(i).getLogin_id().equals(userid)) {
+                                purchasefrom = Users.get(i);
+                            }
+                        for (int j = 0; j <((PremiumAccount)purchasefrom.getCustomer().getAccount()).getProducts().size() ; j++) {
+                             if(((PremiumAccount)purchasefrom.getCustomer().getAccount()).getProducts().get(i).getName().equals(product_name)){
+                                 product = ((PremiumAccount)purchasefrom.getCustomer().getAccount()).getProducts().get(i);
+
+                             }
+                        }
+                        for (int j = 0; j <loggedInUser.getCustomer().getAccount().getOrders().size() ; j++) {
+                                if(loggedInUser.getCustomer().getAccount().getOrders().get(i).getNumber().equals(orderid)){
+                                    LineItem newitem = new LineItem(1,1,loggedInUser.getCustomer().getAccount().getOrders().get(i),product);
+                                }
+                        }
+
+
+                        }
+                    }
 
                             break;
 
