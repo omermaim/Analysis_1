@@ -33,20 +33,11 @@ public class Customer
     address = aAddress;
     phone = aPhone;
     email = aEmail;
-    if (aAccount == null || aAccount.getCustomer() != null)
-    {
-      throw new RuntimeException("Unable to create Customer due to aAccount. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+   // if (aAccount == null || aAccount.getCustomer() != null)
+    //{
+    //  throw new RuntimeException("Unable to create Customer due to aAccount. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    //}
     account = aAccount;
-  }
-
-  public Customer(String aId, Address aAddress, String aPhone, String aEmail, String aIdForAccount, String aBilling_addressForAccount, boolean aIs_closedForAccount, Date aOpenForAccount, Date aClosedForAccount, int aBalanceForAccount, ShopingCart aShopingCartForAccount)
-  {
-    id = aId;
-    address = aAddress;
-    phone = aPhone;
-    email = aEmail;
-    account = new Account(aIdForAccount, aBilling_addressForAccount, aIs_closedForAccount, aOpenForAccount, aClosedForAccount, aBalanceForAccount, this, aShopingCartForAccount);
   }
 
   //------------------------
@@ -174,5 +165,9 @@ public class Customer
             "  " + "address" + "=" + (getAddress() != null ? !getAddress().equals(this)  ? getAddress().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "user = "+(getUser()!=null?Integer.toHexString(System.identityHashCode(getUser())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "account = "+(getAccount()!=null?Integer.toHexString(System.identityHashCode(getAccount())):"null");
+  }
+
+  public void setAccount(Account account) {
+    this.account = account;
   }
 }

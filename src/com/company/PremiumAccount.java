@@ -21,9 +21,9 @@ public class PremiumAccount extends Account
   // CONSTRUCTOR
   //------------------------
 
-  public PremiumAccount(String aId, String aBilling_address, boolean aIs_closed, Date aOpen, Date aClosed, int aBalance, Customer aCustomer, ShopingCart aShopingCart)
+  public PremiumAccount(String aId, String aBilling_address, boolean aIs_closed, int aBalance, Customer aCustomer, ShopingCart aShopingCart)
   {
-    super(aId, aBilling_address, aIs_closed, aOpen, aClosed, aBalance, aCustomer, aShopingCart);
+    super(aId, aBilling_address, aIs_closed, aBalance, aCustomer, aShopingCart);
     products = new ArrayList<Product>();
   }
   public PremiumAccount(String aId, String aBilling_address, boolean aIs_closed, Date aOpen, Date aClosed, int aBalance, String aIdForCustomer, Address aAddressForCustomer, String aPhoneForCustomer, String aEmailForCustomer, Date aCreatedForShopingCart, User aUserForShopingCart)

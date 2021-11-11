@@ -43,17 +43,6 @@ public class ShopingCart
     lineItems = new ArrayList<LineItem>();
   }
 
-  public ShopingCart(Date aCreated, User aUser, String aIdForAccount, String aBilling_addressForAccount, boolean aIs_closedForAccount, Date aOpenForAccount, Date aClosedForAccount, int aBalanceForAccount, Customer aCustomerForAccount)
-  {
-    created = aCreated;
-    boolean didAddUser = setUser(aUser);
-    if (!didAddUser)
-    {
-      throw new RuntimeException("Unable to create shopingCart due to user. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    account = new Account(aIdForAccount, aBilling_addressForAccount, aIs_closedForAccount, aOpenForAccount, aClosedForAccount, aBalanceForAccount, aCustomerForAccount, this);
-    lineItems = new ArrayList<LineItem>();
-  }
 
   //------------------------
   // INTERFACE
@@ -251,5 +240,9 @@ public class ShopingCart
             "  " + "created" + "=" + (getCreated() != null ? !getCreated().equals(this)  ? getCreated().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "user = "+(getUser()!=null?Integer.toHexString(System.identityHashCode(getUser())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "account = "+(getAccount()!=null?Integer.toHexString(System.identityHashCode(getAccount())):"null");
+  }
+
+  public void setAccount(Account account) {
+    this.account = account;
   }
 }

@@ -30,14 +30,17 @@ public class Account
   // CONSTRUCTOR
   //------------------------
 
-  public Account(String aId, String aBilling_address, boolean aIs_closed, Date aOpen, Date aClosed, int aBalance, Customer aCustomer, ShopingCart aShopingCart)
+  public Account(String aId, String aBilling_address, boolean aIs_closed, int aBalance, Customer aCustomer, ShopingCart aShopingCart)
   {
     id = aId;
     billing_address = aBilling_address;
-    is_closed = false;
+    is_closed = aIs_closed;
     open = new java.sql.Date(System.currentTimeMillis());
     balance = aBalance;
     orders = new ArrayList<Order>();
+    closed = null;
+    customer=aCustomer;
+    shopingCart=aShopingCart;
   }
 
   public Account(String aId, String aBilling_address, boolean aIs_closed, Date aOpen, Date aClosed, int aBalance, String aIdForCustomer, Address aAddressForCustomer, String aPhoneForCustomer, String aEmailForCustomer, Date aCreatedForShopingCart, User aUserForShopingCart)
@@ -53,10 +56,6 @@ public class Account
     orders = new ArrayList<Order>();
   }
 
-  public Account(String id,String password) {
-    this.id = id;
-
-  }
 
   //------------------------
   // INTERFACE
@@ -185,9 +184,9 @@ public class Account
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Order addOrder(String aNumber, Date aOrded, Date aShipped, Address aShip_to, OrderStatus aStatus, float aTotal)
+  public Order addOrder(String aNumber, Date aShipped, Address aShip_to, OrderStatus aStatus, float aTotal)
   {
-    return new Order(aNumber, aOrded, aShipped, aShip_to, aStatus, aTotal, this);
+    return new Order(aNumber, aShipped, aShip_to, aStatus, aTotal, this);
   }
 
   public boolean addOrder(Order aOrder)
@@ -285,5 +284,9 @@ public class Account
             "  " + "closed" + "=" + (getClosed() != null ? !getClosed().equals(this)  ? getClosed().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "shopingCart = "+(getShopingCart()!=null?Integer.toHexString(System.identityHashCode(getShopingCart())):"null");
+  }
+
+  public void setShopingCart(ShopingCart shopingCart) {
+    this.shopingCart = shopingCart;
   }
 }

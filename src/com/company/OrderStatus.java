@@ -5,25 +5,6 @@ package com.company;
 
 // line 105 "model.ump"
 // line 190 "model.ump"
-public class OrderStatus
-{
-
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public OrderStatus()
-  {}
-
-  //------------------------
-  // INTERFACE
-  //------------------------
-
-  public void delete()
-  {}
-
+public enum OrderStatus {
+  New,Hold,Shipped,Delivered,Closed
 }
