@@ -13,7 +13,7 @@ public class Main {
         //*
         //*
 
-
+        ArrayList<Order>orders = new ArrayList<>();
         ArrayList<User> Users = new ArrayList<>();
         User loggedInUser = null;
         ArrayList<Product> products = new ArrayList<>();
@@ -109,15 +109,6 @@ public class Main {
                     for (int i = 0; i < Users.size(); i++) {
                         System.out.println(Users.get(i));
                     }
-                    for (int i = 0; i < products.size(); i++) {
-                        System.out.println(products.get(i));
-                    }
-                    for (int i = 0; i < accounts.size(); i++) {
-                        System.out.println(accounts.get(i));
-                    }
-                    for (int i = 0; i < suppliers.size(); i++) {
-                        System.out.println(suppliers.get(i));
-                    }
 
 
                     break;
@@ -190,10 +181,12 @@ public class Main {
                 case 5:
                     //create new order
                     //check if there is a user logged in and if there is go to his account and add the order
+
                     if (loggedInUser != null) {
                         System.out.println("Please enter address to send to ");
                         address = input.next();
                         numoforders++;
+
                         loggedInUser.getCustomer().getAccount().addOrder(numoforders.toString(), null, new Address(address));
                         System.out.println("the order number is " + numoforders.toString());
 
@@ -219,33 +212,59 @@ public class Main {
                     String userid = input.next();
                     System.out.println("Please enter product to purchase ");
                     String product_name = input.next();
-                    User purchasefrom = null;
+                    boolean alreadyin=false;
+                    Supplier purchasefrom = null;
                     Product product=null;
                     if(loggedInUser!=null) {
-                        for (int i = 0; i < Users.size(); i++) {
-                            if (Users.get(i).getLogin_id().equals(userid)) {
-                                purchasefrom = Users.get(i);
+                        for (int i = 0; i < suppliers.size(); i++) {
+                            if (suppliers.get(i).getId().equals(userid)) {
+                                purchasefrom = suppliers.get(i);
                             }
-                        for (int j = 0; j <((PremiumAccount)purchasefrom.getCustomer().getAccount()).getProducts().size() ; j++) {
-                             if(((PremiumAccount)purchasefrom.getCustomer().getAccount()).getProducts().get(i).getName().equals(product_name)){
-                                 product = ((PremiumAccount)purchasefrom.getCustomer().getAccount()).getProducts().get(i);
+                        }
+                        for (int j = 0; j <purchasefrom.getProducts().size() ; j++) {
+                             if(purchasefrom.getProducts().get(j).getName().equals(product_name)){
+                                 product = purchasefrom.getProducts().get(j);
 
                              }
                         }
                         for (int j = 0; j <loggedInUser.getCustomer().getAccount().getOrders().size() ; j++) {
-                                if(loggedInUser.getCustomer().getAccount().getOrders().get(i).getNumber().equals(orderid)){
-                                    LineItem newitem = new LineItem(1,1,loggedInUser.getCustomer().getAccount().getOrders().get(i),product);
+                                if(loggedInUser.getCustomer().getAccount().getOrders().get(j).getNumber().equals(orderid)){
+                                    for (int i = 0; i < loggedInUser.getCustomer().getAccount().getOrders().get(j).getLineItems().size(); i++) {
+                                        if (loggedInUser.getCustomer().getAccount().getOrders().get(j).getLineItems().get(i).getProduct().getName().equals(product_name)){
+                                            alreadyin=true;
+                                            loggedInUser.getCustomer().getAccount().getOrders().get(j).getLineItems().get(i).setQuantity( loggedInUser.getCustomer().getAccount().getOrders().get(j).getLineItems().get(i).getQuantity()+1);
+
+                                        }
+
+                                    }
+                                    if(!alreadyin) {
+                                        LineItem newitem = new LineItem(1, 50, loggedInUser.getCustomer().getAccount().getOrders().get(j), product);
+
+                                    }
+                                    loggedInUser.getCustomer().getAccount().getOrders().get(j).CalculateTotal();
+                                    System.out.println(loggedInUser.getCustomer().getAccount().getOrders().get(j).getTotal());
+
                                 }
+
                         }
 
+
+
+
+                        }
+
+                    for (int i = 0; i <loggedInUser.getCustomer().getAccount().getOrders().size() ; i++) {
+                        for (int j = 0; j < loggedInUser.getCustomer().getAccount().getOrders().get(i).numberOfLineItems(); j++) {
+                            System.out.println(loggedInUser.getCustomer().getAccount().getOrders().get(i).getLineItem(j));
 
                         }
                     }
 
+
                             break;
 
                 case 7:
-                            //Add user
+
 
                             break;
 

@@ -254,6 +254,11 @@ public class LineItem
       placeholderProduct.removeLineItem(this);
     }
   }
+  public int gettotal()
+  {
+    return quantity*price;
+  }
+
 
 
   public String toString()

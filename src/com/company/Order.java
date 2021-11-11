@@ -357,6 +357,13 @@ public class Order
     }
     return wasAdded;
   }
+  public void CalculateTotal(){
+    total=0;
+    for (int i = 0; i < lineItems.size() ; i++) {
+      total = total + lineItems.get(i).gettotal();
+
+    }
+  }
 
   public void delete()
   {
