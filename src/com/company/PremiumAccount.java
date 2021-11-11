@@ -26,6 +26,11 @@ public class PremiumAccount extends Account
     super(aId, aBilling_address, aIs_closed, aOpen, aClosed, aBalance, aCustomer, aShopingCart);
     products = new ArrayList<Product>();
   }
+  public PremiumAccount(String aId, String aBilling_address, boolean aIs_closed, Date aOpen, Date aClosed, int aBalance, String aIdForCustomer, Address aAddressForCustomer, String aPhoneForCustomer, String aEmailForCustomer, Date aCreatedForShopingCart, User aUserForShopingCart)
+  {
+    super(aId, aBilling_address, aIs_closed, aOpen, aClosed, aBalance,aIdForCustomer ,aAddressForCustomer,aPhoneForCustomer,aEmailForCustomer,aCreatedForShopingCart,aUserForShopingCart );
+    products = new ArrayList<Product>();
+  }
 
   //------------------------
   // INTERFACE

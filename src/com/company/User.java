@@ -36,6 +36,18 @@ public class User
       throw new RuntimeException("Unable to create user due to customer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
+  public User(UserState aState, String aPassword, String aLogin_id, Customer aCustomer, ShopingCart shopingCart)
+  {
+    state = aState;
+    password = aPassword;
+    login_id = aLogin_id;
+    boolean didAddCustomer = setCustomer(aCustomer);
+    setShopingCart(shopingCart);
+    if (!didAddCustomer)
+    {
+      throw new RuntimeException("Unable to create user due to customer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+  }
 
   //------------------------
   // INTERFACE

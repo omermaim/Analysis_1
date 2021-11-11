@@ -4,6 +4,7 @@ package com.company;
 
 import java.sql.Date;
 import java.util.*;
+import com.company.*;
 
 // line 18 "model.ump"
 // line 125 "model.ump"

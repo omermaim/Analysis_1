@@ -34,20 +34,9 @@ public class Account
   {
     id = aId;
     billing_address = aBilling_address;
-    is_closed = aIs_closed;
-    open = aOpen;
-    closed = aClosed;
+    is_closed = false;
+    open = new java.sql.Date(System.currentTimeMillis());
     balance = aBalance;
-    if (aCustomer == null || aCustomer.getAccount() != null)
-    {
-      throw new RuntimeException("Unable to create Account due to aCustomer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    customer = aCustomer;
-    if (aShopingCart == null || aShopingCart.getAccount() != null)
-    {
-      throw new RuntimeException("Unable to create Account due to aShopingCart. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    shopingCart = aShopingCart;
     orders = new ArrayList<Order>();
   }
 
@@ -62,6 +51,11 @@ public class Account
     customer = new Customer(aIdForCustomer, aAddressForCustomer, aPhoneForCustomer, aEmailForCustomer, this);
     shopingCart = new ShopingCart(aCreatedForShopingCart, aUserForShopingCart, this);
     orders = new ArrayList<Order>();
+  }
+
+  public Account(String id,String password) {
+    this.id = id;
+
   }
 
   //------------------------

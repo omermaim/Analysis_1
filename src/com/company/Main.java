@@ -1,5 +1,7 @@
 package com.company;
 
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -26,11 +28,46 @@ public class Main {
             System.out.println("13) Exit");
 
             choice = input.nextInt();
+            String id,password,ans,address,phone_num,email,billing_address;
 
+            ArrayList<User> users = new ArrayList<User>();
             switch (choice){
 
                 case 1:
                     //Add user
+                    System.out.println("Enter desired User ID");
+                    id = input.next();
+                    System.out.println("Enter desired password");
+                    password = input.next();
+                    System.out.println("Enter customer address");
+                    address = input.next();
+                    System.out.println("Enter customer phone number");
+                    phone_num = input.next();
+                    System.out.println("Enter customer email");
+                    email = input.next();
+                    System.out.println("Enter account billing address");
+                    billing_address = input.next();
+                    System.out.println("Would you like to upgrade to premium account?\nIf you do enter Y");
+                    ans = input.next();
+
+
+                    java.sql.Date currdate = new java.sql.Date(System.currentTimeMillis());
+                    Account account;
+
+                    if(ans.equals("Y"))
+                    {
+                        account = new PremiumAccount(id, billing_address, false,currdate, null, 0,id,new Address(address),phone_num,email,currdate,null);
+                    }
+                    else{
+                        account = new Account(id, billing_address, false,currdate, null, 0,id,new Address(address),phone_num,email,currdate,null);
+
+                    }
+                    users.add(new User(UserState.New,password,id,(Customer)account.getCustomer(),account.getShopingCart()));
+                    System.out.println(users.get(0));
+
+
+
+
 
                     break;
 
