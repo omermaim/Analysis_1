@@ -98,7 +98,13 @@ public class Main {
                     java.sql.Date currdate = new java.sql.Date(System.currentTimeMillis());
                     Customer Cust2 = new Customer(id, new Address(address), phone_num, email, null);
                     User Us2 = new User(UserState.New, password, id, Cust2);
-                    Account Ac2 = new Account(id, billing_address, false, 0, Cust2, null);
+                    Account Ac2;
+                    if (ans.equals("Y")){
+                        Ac2 = new PremiumAccount(id, billing_address, false, 0, Cust2, null);
+                    }
+                    else{
+                        Ac2= new Account(id, billing_address, false, 0, Cust2, null);
+                    }
                     ShopingCart Shp2 = new ShopingCart(Ac2.getOpen(), Us2, Ac2);
                     Cust2.setAccount(Ac2);
                     Cust2.setUser(Us2);
@@ -106,9 +112,7 @@ public class Main {
                     Ac2.setShopingCart(Shp2);
                     Users.add(Us2);
                     accounts.add(Ac2);
-                    for (int i = 0; i < Users.size(); i++) {
-                        System.out.println(Users.get(i));
-                    }
+
 
 
                     break;
@@ -118,7 +122,7 @@ public class Main {
                     id = input.next();
                     //check if the User ID exists and remove it, need to check that the delete method works as it deletes
                     // also the account,customer and shopping cart associated with the deleted user
-                    System.out.println(Users.size());
+
                     for (int i = 0; i < Users.size(); i++) {
                         if (Users.get(i).getLogin_id().equals(id)) {
                             Users.get(i).getCustomer().getAccount().setClosed(new java.sql.Date(System.currentTimeMillis()));
@@ -128,11 +132,6 @@ public class Main {
                         }
 
                     }
-                    for (int i = 0; i < Users.size(); i++) {
-                        System.out.println(Users.get(i));
-                    }
-
-
                     break;
 
                 case 3:
@@ -200,12 +199,17 @@ public class Main {
 
 
 
-                    System.out.println("number of orders are" + numoforders.toString());
+
 
 
                             break;
 
                 case 6:
+                    //add a product to an order.
+                    //first we find the supplier and put him in purchasefrom then we look at this suppliers products and look for the name the loggedin user entered.\
+                    //then we find the spcefic order using the orderid given to us. then we check if he already has this product in his order,
+                    //if he does we only increase the quantity by 1 of the lineitem already inside , but if he doesnt we create a new lineitem and insert it with quantity 1 and price=50(no reason for the specific price)
+                    //at last we calculate the total price of the order and add it to the datamember of the same order.
                     System.out.println("Please enter Order ID ");
                     String orderid = input.next();
                     System.out.println("Please enter UserId to purchase from ");
@@ -248,43 +252,114 @@ public class Main {
 
                         }
 
+                        }
 
+                            break;
 
+                case 7:
+                    //print the order, look at order tostring to see
+                    loggedInUser.getCustomer().getAccount().getOrders().get(loggedInUser.getCustomer().getAccount().getOrders().size()-1).toString();
+                            break;
+
+                case 8:
+                            //Link Product *Product_Name* *Price* *Quantity*
+                    // we need to check why they want to recieve price and quantity, they ask for a link between product to premieum account.
+                    if(loggedInUser.getCustomer().getAccount() instanceof PremiumAccount) {
+                        System.out.println("Please enter the product name ");
+                        String productname = input.next();
+                        System.out.println("Please enter Price");
+                        String price = input.next();
+                        System.out.println("Please enter Quantity");
+                        String quantity = input.next();
+                        for (int i = 0; i < products.size(); i++) {
+                            if(products.get(i).getName().equals(productname)){
+                                ((PremiumAccount)loggedInUser.getCustomer().getAccount()).addProduct(products.get(i));
+                                System.out.println("link succesful");
+                            }
 
                         }
 
-                    for (int i = 0; i <loggedInUser.getCustomer().getAccount().getOrders().size() ; i++) {
-                        for (int j = 0; j < loggedInUser.getCustomer().getAccount().getOrders().get(i).numberOfLineItems(); j++) {
-                            System.out.println(loggedInUser.getCustomer().getAccount().getOrders().get(i).getLineItem(j));
 
+                    }
+                    else{
+                        System.out.println("We are sorry, you are not a Premiem User.");
+                    }
+
+                            break;
+
+                case 9:
+                            //Add Product
+                    System.out.println("Please enter the new products name ");
+                    String newname = input.next();
+                    System.out.println("Please enter the supplier that provides it");
+                    String sup_name = input.next();
+                    boolean found_sup = false;
+                    for (int i = 0; i < suppliers.size() ; i++) {
+                        if(suppliers.get(i).getName().equals(sup_name)){
+                            found_sup=true;
+                            Product newproduct = new Product(newname,newname,suppliers.get(i));
+                            products.add(newproduct);
                         }
+
+                    }
+                    if(!found_sup){
+                        System.out.println("There is no such supplier");
                     }
 
 
                             break;
 
-                case 7:
-
-
-                            break;
-
-                case 8:
-                            //Add user
-
-                            break;
-
-                case 9:
-                            //Add user
-
-                            break;
-
                 case 10:
-                            //Add user
+                            //Delete product
+                    System.out.println("Please enter the product you want to delete");
+                    String prod_delete = input.next();
+                    boolean found_del = false;
+                    for (int i = 0; i < products.size() ; i++) {
+                        if(products.get(i).getName().equals(prod_delete)){
+                            found_del = true;
+                            products.get(i).delete();
+                            System.out.println("Product deleted");
+                        }
 
-                            break;
+                    }
+                    if(!found_del){
+                        System.out.println("product not found");
+                    }
+
+                    break;
 
                 case 11:
-                            //Add user
+                            //show all objects
+                    String final_print = "";
+                    final_print = final_print + "Users: " + "\n" + "******************************" + "\n";
+                    for (int i = 0; i < Users.size(); i++) {
+                        final_print= final_print + Users.get(i).toString() + "\n" + "******************************" + "\n";
+                    }
+                    final_print = final_print + "Suppliers: " + "\n" + "******************************" + "\n";
+                    for (int i = 0; i < suppliers.size(); i++) {
+                        final_print= final_print + suppliers.get(i).toString() + "\n" + "******************************" + "\n";
+
+                    }
+                    final_print = final_print + "Products: " + "\n" + "******************************" + "\n";
+                    for (int i = 0; i < products.size(); i++) {
+                        final_print= final_print + products.get(i).toString()+ "\n" + "******************************" + "\n";
+
+                    }
+                    final_print = final_print + "Orders: " + "\n" + "******************************" + "\n";
+                    for (int i = 0; i < orders.size(); i++) {
+                        final_print= final_print + orders.get(i).toString()+ "\n" + "******************************" + "\n";
+                    }
+                    final_print = final_print + "Accounts: " + "\n" + "******************************" + "\n";
+                    for (int i = 0; i < accounts.size(); i++) {
+                        final_print= final_print + accounts.get(i).toString()+ "\n" + "******************************" + "\n";
+                    }
+                    final_print = final_print + "Customers: " + "\n" + "******************************" + "\n";
+                    for (int i = 0; i < Users.size(); i++) {
+                        final_print= final_print + Users.get(i).getCustomer().toString()+ "\n" + "******************************" + "\n";
+
+                    }
+                    System.out.println(final_print);
+
                         break;
 
                 case 12:
