@@ -51,7 +51,7 @@ public class Main {
         // for order id we will hold a counter
         //*
         //*
-        int numoforders=0;
+        Integer numoforders=0;
 
 
         int choice;
@@ -186,7 +186,20 @@ public class Main {
 
 
                 case 5:
-                            //Add user
+                    //create new order
+                    if(loggedInUser!=null) {
+                        System.out.println("Please enter address to send to ");
+                        address = input.next();
+                        numoforders++;
+                        loggedInUser.getCustomer().getAccount().addOrder(numoforders.toString(), null, new Address(address));
+                        System.out.println("the order number is " + loggedInUser.getCustomer().getAccount().getOrder(0));
+
+
+                    }
+                    else {
+                        System.out.println("no User logged in");
+                    }
+
 
                             break;
 

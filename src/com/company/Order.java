@@ -31,14 +31,14 @@ public class Order
   // CONSTRUCTOR
   //------------------------
 
-  public Order(String aNumber,Date aShipped, Address aShip_to, OrderStatus aStatus, float aTotal, Account aAccount)
+  public Order(String aNumber,Date aShipped, Address aShip_to, Account aAccount)
   {
     number = aNumber;
     orded = new java.sql.Date(System.currentTimeMillis());
     shipped = aShipped;
     ship_to = aShip_to;
     status = OrderStatus.New;
-    total = aTotal;
+    total = 0;
     payments = new ArrayList<Payment>();
     boolean didAddAccount = setAccount(aAccount);
     if (!didAddAccount)

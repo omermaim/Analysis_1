@@ -184,9 +184,9 @@ public class Account
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Order addOrder(String aNumber, Date aShipped, Address aShip_to, OrderStatus aStatus, float aTotal)
+  public Order addOrder(String aNumber, Date aShipped, Address aShip_to)
   {
-    return new Order(aNumber, aShipped, aShip_to, aStatus, aTotal, this);
+    return new Order(aNumber, aShipped, aShip_to, this);
   }
 
   public boolean addOrder(Order aOrder)
