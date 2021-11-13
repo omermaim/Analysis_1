@@ -384,6 +384,16 @@ public class Order
       aLineItem.delete();
     }
   }
+  public String print(){
+    return  "["+
+            "number" + ":" + getNumber()+ "," +
+            "total" + ":" + getTotal()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "orded" + "=" + getOrded().toString() + System.getProperties().getProperty("line.separator") +
+            "  " + "shipped" + "=" + getShipped().toString() + System.getProperties().getProperty("line.separator") +
+            "  " + "ship_to" + "=" + getShip_to().toString()  + System.getProperties().getProperty("line.separator") +
+            "  " + "status" + "=" + getStatus().toString() + System.getProperties().getProperty("line.separator");
+
+  }
 
 
   public String toString()
@@ -391,10 +401,10 @@ public class Order
     return  "["+
             "number" + ":" + getNumber()+ "," +
             "total" + ":" + getTotal()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "orded" + "=" + getOrded().toString() + System.getProperties().getProperty("line.separator") +
-            "  " + "shipped" + "=" + getShipped().toString() + System.getProperties().getProperty("line.separator") +
-            "  " + "ship_to" + "=" + getShip_to().toString()  + System.getProperties().getProperty("line.separator") +
-            "  " + "status" + "=" + getStatus().toString() + System.getProperties().getProperty("line.separator") +
-            "  " + "total" +  "=" + String.format("%.2f",getTotal());
+            "  " + "orded" + "=" + (getOrded() != null ? !getOrded().equals(this)  ? getOrded().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "shipped" + "=" + (getShipped() != null ? !getShipped().equals(this)  ? getShipped().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "ship_to" + "=" + (getShip_to() != null ? !getShip_to().equals(this)  ? getShip_to().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "status" + "=" + (getStatus() != null ? !getStatus().equals(this)  ? getStatus().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "account = "+(getAccount()!=null?Integer.toHexString(System.identityHashCode(getAccount())):"null");
   }
 }

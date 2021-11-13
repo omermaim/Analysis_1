@@ -126,6 +126,7 @@ public class Main {
                     for (int i = 0; i < Users.size(); i++) {
                         if (Users.get(i).getLogin_id().equals(id)) {
                             Users.get(i).getCustomer().getAccount().setClosed(new java.sql.Date(System.currentTimeMillis()));
+                            Users.get(i).getCustomer().getAccount().setIs_closed(true);
                             Users.get(i).delete();
                             Users.remove(i);
 
@@ -148,7 +149,7 @@ public class Main {
                             if (Users.get(i).getLogin_id().equals(id) && Users.get(i).getPassword().equals(password)) {
                                 loggedInUser = Users.get(i);
                                 found = true;
-                                System.out.println("User succesfly logged in");
+                                System.out.println("User " + loggedInUser.getLogin_id() + " successfly logged in");
                             }
                         }
                         if (!found) {
@@ -157,10 +158,6 @@ public class Main {
                     } else {
                         System.out.println("User already logged in");
                     }
-
-
-                    System.out.println(loggedInUser);
-
                     break;
 
 
@@ -173,7 +170,7 @@ public class Main {
                         loggedInUser = null;
                         System.out.println("User with id " + id + " succesfuly logged out");
                     } else {
-                        System.out.println("User with id" + id + " is not logged in");
+                        System.out.println("User with id " + id + " is not logged in");
                     }
 
 
@@ -186,7 +183,8 @@ public class Main {
                         address = input.next();
                         numoforders++;
 
-                        loggedInUser.getCustomer().getAccount().addOrder(numoforders.toString(), null, new Address(address));
+                        Order neworder = loggedInUser.getCustomer().getAccount().addOrder(numoforders.toString(), new java.sql.Date(System.currentTimeMillis()), new Address(address));
+                        orders.add(neworder);
                         System.out.println("the order number is " + numoforders.toString());
 
 
@@ -258,7 +256,7 @@ public class Main {
 
                 case 7:
                     //print the order, look at order tostring to see
-                    loggedInUser.getCustomer().getAccount().getOrders().get(loggedInUser.getCustomer().getAccount().getOrders().size()-1).toString();
+                    System.out.println(loggedInUser.getCustomer().getAccount().getOrders().get(loggedInUser.getCustomer().getAccount().getOrders().size()-1).print());
                             break;
 
                 case 8:
@@ -299,6 +297,7 @@ public class Main {
                             found_sup=true;
                             Product newproduct = new Product(newname,newname,suppliers.get(i));
                             products.add(newproduct);
+                            System.out.println("product succesfly added to supplier " + suppliers.get(i).getName());
                         }
 
                     }
@@ -318,6 +317,7 @@ public class Main {
                         if(products.get(i).getName().equals(prod_delete)){
                             found_del = true;
                             products.get(i).delete();
+                            products.remove(i);
                             System.out.println("Product deleted");
                         }
 

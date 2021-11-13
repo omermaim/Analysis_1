@@ -182,10 +182,12 @@ public class User
 
   public String toString()
   {
-    return  "["+
-            "password" + ":" + getPassword()+ "," +
-            "login_id" + ":" + getLogin_id()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "state" + "=" + (getState());
+    return super.toString() + "["+
+          "password" + ":" + getPassword()+ "," +
+          "login_id" + ":" + getLogin_id()+ "]" + System.getProperties().getProperty("line.separator") +
+          "  " + "state" + "=" + (getState() != null ? !getState().equals(this)  ? getState().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+          "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null") + System.getProperties().getProperty("line.separator") +
+          "  " + "shopingCart = "+(getShopingCart()!=null?Integer.toHexString(System.identityHashCode(getShopingCart())):"null");
 
   }
 }
