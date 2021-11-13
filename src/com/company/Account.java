@@ -232,6 +232,9 @@ public class Account
     }
     return wasAdded;
   }
+  public String printObject(){
+    return this.getClass() + " " + this.getId() + " " +  Integer.toHexString(System.identityHashCode(this));
+  }
 
   public boolean addOrMoveOrderAt(Order aOrder, int index)
   {
@@ -275,15 +278,15 @@ public class Account
 
   public String toString()
   {
-    return super.toString() + "["+
-            "id" + ":" + getId()+ "," +
-            "billing_address" + ":" + getBilling_address()+ "," +
-            "is_closed" + ":" + getIs_closed()+ "," +
+    return super.toString() + System.getProperties().getProperty("line.separator") +
+            "id" + ":" + getId()+ System.getProperties().getProperty("line.separator") +
+            "billing_address" + ":" + getBilling_address()+ System.getProperties().getProperty("line.separator") +
+            "is_closed" + ":" + getIs_closed()+ System.getProperties().getProperty("line.separator") +
             "balance" + ":" + getBalance()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "open" + "=" + (getOpen() != null ? !getOpen().equals(this)  ? getOpen().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "closed" + "=" + (getClosed() != null ? !getClosed().equals(this)  ? getClosed().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "shopingCart = "+(getShopingCart()!=null?Integer.toHexString(System.identityHashCode(getShopingCart())):"null");
+            "open" + "=" + (getOpen() != null ? !getOpen().equals(this)  ? getOpen().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "closed" + "=" + (getClosed() != null ? !getClosed().equals(this)  ? getClosed().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null") + System.getProperties().getProperty("line.separator") +
+            "shopingCart = "+(getShopingCart()!=null?Integer.toHexString(System.identityHashCode(getShopingCart())):"null");
   }
 
   public void setShopingCart(ShopingCart shopingCart) {

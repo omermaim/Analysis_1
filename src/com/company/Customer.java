@@ -59,6 +59,9 @@ public class Customer
     wasSet = true;
     return wasSet;
   }
+  public String printObject(){
+    return this.getClass() + " " + this.getId() + " " +  Integer.toHexString(System.identityHashCode(this));
+  }
 
   public boolean setPhone(String aPhone)
   {
@@ -158,13 +161,13 @@ public class Customer
 
   public String toString()
   {
-    return super.toString() + "["+
-            "id" + ":" + getId()+ "," +
-            "phone" + ":" + getPhone()+ "," +
-            "email" + ":" + getEmail()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "address" + "=" + (getAddress() != null ? !getAddress().equals(this)  ? getAddress().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "user = "+(getUser()!=null?Integer.toHexString(System.identityHashCode(getUser())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "account = "+(getAccount()!=null?Integer.toHexString(System.identityHashCode(getAccount())):"null");
+    return super.toString() + System.getProperties().getProperty("line.separator") +
+            "id" + ":" + getId()+ System.getProperties().getProperty("line.separator") +
+            "phone" + ":" + getPhone()+ System.getProperties().getProperty("line.separator") +
+            "email" + ":" + getEmail() + System.getProperties().getProperty("line.separator") +
+            "address" + "=" + (getAddress() != null ? !getAddress().equals(this)  ? getAddress().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "user = "+(getUser()!=null?Integer.toHexString(System.identityHashCode(getUser())):"null") + System.getProperties().getProperty("line.separator") +
+            "account = "+(getAccount()!=null?Integer.toHexString(System.identityHashCode(getAccount())):"null");
   }
 
   public void setAccount(Account account) {

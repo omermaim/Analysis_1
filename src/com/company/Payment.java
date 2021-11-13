@@ -74,6 +74,9 @@ public class Payment
     wasSet = true;
     return wasSet;
   }
+  public String printObject(){
+    return this.getClass() + " " + this.getId() + " " +  Integer.toHexString(System.identityHashCode(this));
+  }
 
   public String getId()
   {

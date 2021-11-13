@@ -221,6 +221,9 @@ public class Product
     }
     return wasAdded;
   }
+  public String printObject(){
+    return this.getClass() + " " + this.getId() + " " +  Integer.toHexString(System.identityHashCode(this));
+  }
 
   public void delete()
   {
@@ -246,10 +249,16 @@ public class Product
 
   public String toString()
   {
-    return super.toString() + "["+
-            "id" + ":" + getId()+ "," +
-            "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "supplier = "+(getSupplier()!=null?Integer.toHexString(System.identityHashCode(getSupplier())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "premiumAccount = "+(getPremiumAccount()!=null?Integer.toHexString(System.identityHashCode(getPremiumAccount())):"null");
+    String str = "";
+    str = str + super.toString() +
+            "id" + ":" + getId()+ System.getProperties().getProperty("line.separator") +
+            "name" + ":" + getName() + System.getProperties().getProperty("line.separator") +
+            "supplier = "+(getSupplier()!=null?Integer.toHexString(System.identityHashCode(getSupplier())):"null") + System.getProperties().getProperty("line.separator") +
+            "premiumAccount = "+(getPremiumAccount()!=null?Integer.toHexString(System.identityHashCode(getPremiumAccount())):"null") + System.getProperties().getProperty("line.separator") +
+             "LineItems" + ":" + "\n" + "**************";
+    for (int i = 0; i < getLineItems().size(); i++) {
+      str = str + System.getProperties().getProperty("line.separator") + getLineItems().get(i).printObject();
+    }
+    return  str;
   }
 }

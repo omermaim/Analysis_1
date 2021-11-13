@@ -171,12 +171,22 @@ public class Supplier
       aProduct.delete();
     }
   }
+  public String printObject(){
+    return this.getClass() + " " + this.getId() + " " +  Integer.toHexString(System.identityHashCode(this));
+  }
 
 
   public String toString()
   {
-    return super.toString() + "["+
-            "id" + ":" + getId()+ "," +
-            "name" + ":" + getName()+ "]";
+    String str = "";
+    str = str + super.toString() + System.getProperties().getProperty("line.separator") +
+            "id" + ":" + getId()+  System.getProperties().getProperty("line.separator") +
+            "name" + ":" + getName()+ System.getProperties().getProperty("line.separator") +
+            "Products" + ":" + "\n" + "**************";
+    for (int i = 0; i < getProducts().size(); i++) {
+      str = str + "\n" + getProducts().get(i).printObject();
+
+    }
+    return str;
   }
 }

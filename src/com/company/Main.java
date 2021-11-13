@@ -41,7 +41,7 @@ public class Main {
         Cust.setAccount(Ac1);
         Cust.setUser(Us1);
         Shp.setAccount(Ac1);
-        Ac.setShopingCart(Shp1);
+        Ac1.setShopingCart(Shp1);
         Users.add(Us1);
         Users.add(Us);
         accounts.add(Ac1);
@@ -95,7 +95,7 @@ public class Main {
                     ans = input.next();
                     //create a new user by the information provided
 
-                    java.sql.Date currdate = new java.sql.Date(System.currentTimeMillis());
+
                     Customer Cust2 = new Customer(id, new Address(address), phone_num, email, null);
                     User Us2 = new User(UserState.New, password, id, Cust2);
                     Account Ac2;
@@ -125,6 +125,10 @@ public class Main {
 
                     for (int i = 0; i < Users.size(); i++) {
                         if (Users.get(i).getLogin_id().equals(id)) {
+                            if(loggedInUser==Users.get(i)){
+                                loggedInUser=null;
+                                System.out.println("you have the deleted the user that is logged in, currently ther is no User logged in");
+                            }
                             Users.get(i).getCustomer().getAccount().setClosed(new java.sql.Date(System.currentTimeMillis()));
                             Users.get(i).getCustomer().getAccount().setIs_closed(true);
                             Users.get(i).delete();
@@ -223,6 +227,7 @@ public class Main {
                                 purchasefrom = suppliers.get(i);
                             }
                         }
+
                         for (int j = 0; j <purchasefrom.getProducts().size() ; j++) {
                              if(purchasefrom.getProducts().get(j).getName().equals(product_name)){
                                  product = purchasefrom.getProducts().get(j);
@@ -256,6 +261,7 @@ public class Main {
 
                 case 7:
                     //print the order, look at order tostring to see
+                    loggedInUser.getCustomer().getAccount().getOrders().get(loggedInUser.getCustomer().getAccount().getOrders().size()-1).CalculateTotal();
                     System.out.println(loggedInUser.getCustomer().getAccount().getOrders().get(loggedInUser.getCustomer().getAccount().getOrders().size()-1).print());
                             break;
 
@@ -317,6 +323,7 @@ public class Main {
                         if(products.get(i).getName().equals(prod_delete)){
                             found_del = true;
                             products.get(i).delete();
+
                             products.remove(i);
                             System.out.println("Product deleted");
                         }
@@ -333,29 +340,44 @@ public class Main {
                     String final_print = "";
                     final_print = final_print + "Users: " + "\n" + "******************************" + "\n";
                     for (int i = 0; i < Users.size(); i++) {
-                        final_print= final_print + Users.get(i).toString() + "\n" + "******************************" + "\n";
+                        final_print= final_print + Users.get(i).printObject() + "\n" + "******************************" + "\n";
                     }
                     final_print = final_print + "Suppliers: " + "\n" + "******************************" + "\n";
                     for (int i = 0; i < suppliers.size(); i++) {
-                        final_print= final_print + suppliers.get(i).toString() + "\n" + "******************************" + "\n";
+                        final_print= final_print + suppliers.get(i).printObject() + "\n" + "******************************" + "\n";
 
                     }
                     final_print = final_print + "Products: " + "\n" + "******************************" + "\n";
                     for (int i = 0; i < products.size(); i++) {
-                        final_print= final_print + products.get(i).toString()+ "\n" + "******************************" + "\n";
+                        final_print= final_print + products.get(i).printObject()+ "\n" + "******************************" + "\n";
 
                     }
                     final_print = final_print + "Orders: " + "\n" + "******************************" + "\n";
                     for (int i = 0; i < orders.size(); i++) {
-                        final_print= final_print + orders.get(i).toString()+ "\n" + "******************************" + "\n";
+                        orders.get(i).CalculateTotal();
+                        final_print= final_print + orders.get(i).printObject()+ "\n" + "******************************" + "\n";
                     }
+                    final_print = final_print + "LineItems: " + "\n" + "******************************" + "\n";
+                    for (int i = 0; i < orders.size(); i++) {
+                        for (int j = 0; j <orders.get(i).getLineItems().size() ; j++) {
+                            final_print= final_print + orders.get(i).getLineItems().get(j).printObject() + "\n" + "******************************" + "\n";
+                        }
+
+                    }
+
                     final_print = final_print + "Accounts: " + "\n" + "******************************" + "\n";
                     for (int i = 0; i < accounts.size(); i++) {
-                        final_print= final_print + accounts.get(i).toString()+ "\n" + "******************************" + "\n";
+                        final_print= final_print + accounts.get(i).printObject()+ "\n" + "******************************" + "\n";
+                    }
+                    final_print = final_print + "ShoppingCarts: " + "\n" + "******************************" + "\n";
+                    for (int i = 0; i < accounts.size(); i++) {
+                        if(accounts.get(i).getShopingCart()!=null) {
+                            final_print = final_print + accounts.get(i).getShopingCart().printObject() + "\n" + "******************************" + "\n";
+                        }
                     }
                     final_print = final_print + "Customers: " + "\n" + "******************************" + "\n";
                     for (int i = 0; i < Users.size(); i++) {
-                        final_print= final_print + Users.get(i).getCustomer().toString()+ "\n" + "******************************" + "\n";
+                        final_print= final_print + Users.get(i).getCustomer().printObject()+ "\n" + "******************************" + "\n";
 
                     }
                     System.out.println(final_print);
@@ -363,7 +385,85 @@ public class Main {
                         break;
 
                 case 12:
-                            //Add user
+                            //show object
+                    System.out.println("Enter desired Object ID to show");
+                    String Obj_id = input.next();
+                    boolean obj_found = false;
+                    String final_obj = "";
+
+                    for (int i = 0; i < Users.size(); i++) {
+                        if(Integer.toHexString(System.identityHashCode(Users.get(i))).equals(Obj_id)){
+                            final_obj = final_obj + Users.get(i).toString();
+                            obj_found=true;
+
+                        }
+                    }
+
+                    for (int i = 0; i < suppliers.size(); i++) {
+                        if(Integer.toHexString(System.identityHashCode(suppliers.get(i))).equals(Obj_id)) {
+                            final_obj = final_obj + suppliers.get(i).toString();
+                            obj_found=true;
+                        }
+
+                    }
+
+                    for (int i = 0; i < products.size(); i++) {
+                        if(Integer.toHexString(System.identityHashCode(products.get(i))).equals(Obj_id)) {
+                            final_obj = final_obj + products.get(i).toString();
+                            obj_found=true;
+                        }
+
+                    }
+
+                    for (int i = 0; i < orders.size(); i++) {
+                        orders.get(i).CalculateTotal();
+                        if(Integer.toHexString(System.identityHashCode(orders.get(i))).equals(Obj_id)) {
+                            final_obj = final_obj + orders.get(i).toString();
+                            obj_found=true;
+                        }
+                    }
+
+                    for (int i = 0; i < orders.size(); i++) {
+                        for (int j = 0; j <orders.get(i).getLineItems().size() ; j++) {
+                            if (Integer.toHexString(System.identityHashCode(orders.get(i).getLineItems().get(j))).equals(Obj_id)) {
+                                final_obj = final_obj + orders.get(i).getLineItems().get(j).toString();
+                                obj_found=true;
+                            }
+                        }
+
+                    }
+
+
+                    for (int i = 0; i < accounts.size(); i++) {
+                        if(Integer.toHexString(System.identityHashCode(accounts.get(i))).equals(Obj_id)) {
+                            final_obj = final_obj + accounts.get(i).toString();
+                            obj_found=true;
+                        }
+                    }
+
+                    for (int i = 0; i < accounts.size(); i++) {
+                        if(accounts.get(i).getShopingCart()!=null) {
+                            if(Integer.toHexString(System.identityHashCode(accounts.get(i).getShopingCart())).equals(Obj_id)) {
+                                final_obj = final_obj + accounts.get(i).getShopingCart().toString();
+                                obj_found=true;
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < Users.size(); i++) {
+                        if(Integer.toHexString(System.identityHashCode(Users.get(i).getCustomer())).equals(Obj_id)) {
+                            final_obj = final_obj + Users.get(i).getCustomer().toString();
+                            obj_found=true;
+                        }
+
+                    }
+                    if(obj_found){
+                        System.out.println(final_obj);
+                    }
+                    else{
+                        System.out.println("there is no Object with this id in the system");
+                    }
+
 
                             break;
 
