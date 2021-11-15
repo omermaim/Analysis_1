@@ -71,22 +71,24 @@ public class PremiumAccount extends Account
     return 0;
   }
   /* Code from template association_AddManyToOptionalOne */
-  public boolean addProduct(Product aProduct)
+  public boolean addProduct(Product aProduct,int quantity,int price)
   {
     boolean wasAdded = false;
     if (products.contains(aProduct)) { return false; }
     PremiumAccount existingPremiumAccount = aProduct.getPremiumAccount();
     if (existingPremiumAccount == null)
     {
-      aProduct.setPremiumAccount(this);
+      aProduct.setPremiumAccount(this,quantity,price);
     }
     else if (!this.equals(existingPremiumAccount))
     {
       existingPremiumAccount.removeProduct(aProduct);
-      addProduct(aProduct);
+      addProduct(aProduct,quantity,price);
     }
     else
     {
+      aProduct.setPrice(price);
+      aProduct.setQuantity(quantity);
       products.add(aProduct);
     }
     wasAdded = true;
@@ -99,49 +101,21 @@ public class PremiumAccount extends Account
     if (products.contains(aProduct))
     {
       products.remove(aProduct);
-      aProduct.setPremiumAccount(null);
+      aProduct.setPremiumAccount(null,0,0);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addProductAt(Product aProduct, int index)
-  {  
-    boolean wasAdded = false;
-    if(addProduct(aProduct))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfProducts()) { index = numberOfProducts() - 1; }
-      products.remove(aProduct);
-      products.add(index, aProduct);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
 
-  public boolean addOrMoveProductAt(Product aProduct, int index)
-  {
-    boolean wasAdded = false;
-    if(products.contains(aProduct))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfProducts()) { index = numberOfProducts() - 1; }
-      products.remove(aProduct);
-      products.add(index, aProduct);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addProductAt(aProduct, index);
-    }
-    return wasAdded;
-  }
+
+
 
   @Override
   public String toString() {
     String str = super.toString() + "\n" + "Associated Products: " + "\n" + "****************" + "\n";
     for (int i = 0; i <getProducts().size() ; i++) {
-      str = str  + getProducts().get(i).printObject() + "\n";
+      str = str  + getProducts().get(i).printObject() +", quantity remaining : " + getProducts().get(i).getQuantity() + ", the price of product for this account : " + getProducts().get(i).getPrice() + "\n";
 
     }
     return str;
@@ -151,7 +125,7 @@ public class PremiumAccount extends Account
   {
     while( !products.isEmpty() )
     {
-      products.get(0).setPremiumAccount(null);
+      products.get(0).setPremiumAccount(null,0,0);
     }
     super.delete();
   }

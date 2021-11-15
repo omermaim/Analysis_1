@@ -13,7 +13,7 @@ public class Main {
         //*
         //*
 
-        ArrayList<Order>orders = new ArrayList<>();
+
         ArrayList<User> Users = new ArrayList<>();
         User loggedInUser = null;
         ArrayList<Product> products = new ArrayList<>();
@@ -35,12 +35,12 @@ public class Main {
         Ac.setShopingCart(Shp);
         Customer Cust1 = new Customer("Dana", null, null, null, null);
         User Us1 = new User(UserState.New, "Dana123", "Dana", Cust1);
-        PremiumAccount Ac1 = new PremiumAccount("Dana", null, false, 0, Cust1, null);
-        Ac1.addProduct(products.get(0));
+        Account Ac1 = new PremiumAccount("Dana", null, false, 0, Cust1, null);
+        ((PremiumAccount)Ac1).addProduct(products.get(0),50,100);
         ShopingCart Shp1 = new ShopingCart(Ac1.getOpen(), Us1, Ac1);
-        Cust.setAccount(Ac1);
-        Cust.setUser(Us1);
-        Shp.setAccount(Ac1);
+        Cust1.setAccount(Ac1);
+        Cust1.setUser(Us1);
+        Shp1.setAccount(Ac1);
         Ac1.setShopingCart(Shp1);
         Users.add(Us1);
         Users.add(Us);
@@ -54,7 +54,7 @@ public class Main {
         Integer numoforders=0;
 
 
-        Integer choice=-1;
+        Integer choice;
         while (true) {
             System.out.println("Enter the number of the operation you would like to do:");
             System.out.println("*** Our machine is case-sensitive ***");;
@@ -134,8 +134,7 @@ public class Main {
                                 loggedInUser=null;
                                 System.out.println("you have the deleted the user that is logged in, currently ther is no User logged in");
                             }
-                            Users.get(i).getCustomer().getAccount().setClosed(new java.sql.Date(System.currentTimeMillis()));
-                            Users.get(i).getCustomer().getAccount().setIs_closed(true);
+
                             Users.get(i).getCustomer().getAccount().delete();
                             accounts.remove(i);
 
@@ -168,7 +167,7 @@ public class Main {
                             System.out.println("User does not exist");
                         }
                     } else {
-                        System.out.println("User already logged in");
+                        System.out.println("User " + loggedInUser.getCustomer().getId() +  " already logged in");
                     }
                     break;
 
@@ -195,8 +194,7 @@ public class Main {
                         address = input.next();
                         numoforders++;
 
-                        Order neworder = loggedInUser.getCustomer().getAccount().addOrder(numoforders.toString(), new java.sql.Date(System.currentTimeMillis()), new Address(address));
-                        orders.add(neworder);
+                       loggedInUser.getCustomer().getAccount().addOrder(numoforders.toString(), new java.sql.Date(System.currentTimeMillis()), new Address(address));
                         System.out.println("the order number is " + numoforders.toString());
 
 
@@ -229,42 +227,85 @@ public class Main {
                     System.out.println("Please enter product to purchase ");
                     String product_name = input.next();
                     boolean alreadyin=false;
-                    Supplier purchasefrom = null;
+                    PremiumAccount purchasefrom = null;
                     Product product=null;
-                        for (int i = 0; i < suppliers.size(); i++) {
-                            if (suppliers.get(i).getId().equals(userid)) {
-                                purchasefrom = suppliers.get(i);
+                    int productnum = -1;
+                    boolean foundaccount = false;
+                    boolean foundproduct = false;
+                    boolean outofstock = false;
+                    int ordernum= -1;
+                        for (int i = 0; i < accounts.size(); i++) {
+                            if(accounts.get(i) instanceof PremiumAccount){
+                                if (accounts.get(i).getId().equals(userid)) {
+                                    purchasefrom = (PremiumAccount) accounts.get(i);
+                                    foundaccount = true;
+                                }
                             }
+                        }
+                        if(!foundaccount){
+                            System.out.println("no such User");
+                            break;
                         }
 
                         for (int j = 0; j <purchasefrom.getProducts().size() ; j++) {
                              if(purchasefrom.getProducts().get(j).getName().equals(product_name)){
                                  product = purchasefrom.getProducts().get(j);
+                                 foundproduct = true;
+                                 productnum = j;
 
                              }
                         }
+                        if(!foundproduct){
+                            System.out.println("this User does not sell this product");
+                            break;
+                        }
                         for (int j = 0; j <loggedInUser.getCustomer().getAccount().getOrders().size() ; j++) {
                                 if(loggedInUser.getCustomer().getAccount().getOrders().get(j).getNumber().equals(orderid)){
+                                    ordernum = j;
                                     for (int i = 0; i < loggedInUser.getCustomer().getAccount().getOrders().get(j).getLineItems().size(); i++) {
                                         if (loggedInUser.getCustomer().getAccount().getOrders().get(j).getLineItems().get(i).getProduct().getName().equals(product_name)){
-                                            alreadyin=true;
-                                            loggedInUser.getCustomer().getAccount().getOrders().get(j).getLineItems().get(i).setQuantity( loggedInUser.getCustomer().getAccount().getOrders().get(j).getLineItems().get(i).getQuantity()+1);
+                                            if(purchasefrom.getProduct(productnum).getQuantity()>0) {
+                                                alreadyin = true;
+                                                loggedInUser.getCustomer().getAccount().getOrders().get(j).getLineItems().get(i).setQuantity(loggedInUser.getCustomer().getAccount().getOrders().get(j).getLineItems().get(i).getQuantity() + 1);
+                                                purchasefrom.getProduct(productnum).setQuantity(purchasefrom.getProduct(productnum).getQuantity() - 1);
+                                            }
+                                            else{
+                                                outofstock = true;
+                                            }
 
                                         }
 
+
                                     }
                                     if(!alreadyin) {
-                                        LineItem newitem = new LineItem(1, 50, loggedInUser.getCustomer().getAccount().getOrders().get(j), product);
+                                        if (purchasefrom.getProduct(productnum).getQuantity() > 0) {
+                                            LineItem newitem = new LineItem(1, product.getPrice(), loggedInUser.getCustomer().getAccount().getOrders().get(j), product);
+                                            purchasefrom.getProduct(productnum).setQuantity(purchasefrom.getProduct(productnum).getQuantity() - 1);
+                                        }
+                                    }
+
 
                                     }
-                                    loggedInUser.getCustomer().getAccount().getOrders().get(j).CalculateTotal();
-                                    System.out.println(loggedInUser.getCustomer().getAccount().getOrders().get(j).getTotal());
 
+                                if(outofstock){
+                                    System.out.println("this product has run out for the premiuem account");
                                 }
 
+
+                                }
+                        if(ordernum>=0) {
+                            loggedInUser.getCustomer().getAccount().getOrders().get(ordernum).CalculateTotal();
+                            System.out.println("the total price of your order is:");
+                            System.out.println(loggedInUser.getCustomer().getAccount().getOrders().get(ordernum).getTotal());
+                            System.out.println("the Premium accounts remainig quantity of product is : " + purchasefrom.getProduct(productnum).getQuantity());
+                        }
+                        else{
+                            System.out.println("no such order for this User");
                         }
 
                         }
+
+
                     else{
                         System.out.println("No User is logged in");
                     }
@@ -301,7 +342,7 @@ public class Main {
                         String quantity = input.next();
                         for (int i = 0; i < products.size(); i++) {
                             if (products.get(i).getName().equals(productname)) {
-                                ((PremiumAccount) loggedInUser.getCustomer().getAccount()).addProduct(products.get(i));
+                                ((PremiumAccount) loggedInUser.getCustomer().getAccount()).addProduct(products.get(i),Integer.parseInt(quantity),Integer.parseInt(price));
                                 System.out.println("link succesful");
                             }
 
@@ -380,14 +421,20 @@ public class Main {
 
                     }
                     final_print = final_print + "Orders: " + "\n" + "******************************" + "\n";
-                    for (int i = 0; i < orders.size(); i++) {
-                        orders.get(i).CalculateTotal();
-                        final_print= final_print + orders.get(i).printObject()+ "\n" + "******************************" + "\n";
+                    for (int i = 0; i < accounts.size(); i++) {
+                        for (int j = 0; j < accounts.get(i).getOrders().size(); j++) {
+                            accounts.get(i).getOrders().get(j).CalculateTotal();
+                            final_print= final_print + accounts.get(i).getOrders().get(j).printObject()+ "\n" + "******************************" + "\n";
+                        }
                     }
                     final_print = final_print + "LineItems: " + "\n" + "******************************" + "\n";
-                    for (int i = 0; i < orders.size(); i++) {
-                        for (int j = 0; j <orders.get(i).getLineItems().size() ; j++) {
-                            final_print= final_print + orders.get(i).getLineItems().get(j).printObject() + "\n" + "******************************" + "\n";
+                    for (int i = 0; i < accounts.size(); i++) {
+                        for (int j = 0; j <accounts.get(i).getOrders().size() ; j++) {
+                            for (int k = 0; k < accounts.get(i).getOrders().get(j).getLineItems().size(); k++) {
+                                final_print= final_print + accounts.get(i).getOrders().get(j).getLineItems().get(k).printObject() + "\n" + "******************************" + "\n";
+
+                            }
+
                         }
 
                     }
@@ -442,20 +489,25 @@ public class Main {
 
                     }
 
-                    for (int i = 0; i < orders.size(); i++) {
-                        orders.get(i).CalculateTotal();
-                        if(Integer.toHexString(System.identityHashCode(orders.get(i))).equals(Obj_id)) {
-                            final_obj = final_obj + orders.get(i).toString();
-                            obj_found=true;
+                    for (int i = 0; i < accounts.size(); i++) {
+                        for (int j = 0; j < accounts.get(i).getOrders().size(); j++) {
+                            accounts.get(i).getOrders().get(j).CalculateTotal();
+                            if (Integer.toHexString(System.identityHashCode( accounts.get(i).getOrders().get(j))).equals(Obj_id)) {
+                                final_obj = final_obj + accounts.get(i).getOrders().get(j).toString();
+                                obj_found = true;
+                            }
                         }
                     }
 
-                    for (int i = 0; i < orders.size(); i++) {
-                        for (int j = 0; j <orders.get(i).getLineItems().size() ; j++) {
-                            if (Integer.toHexString(System.identityHashCode(orders.get(i).getLineItems().get(j))).equals(Obj_id)) {
-                                final_obj = final_obj + orders.get(i).getLineItems().get(j).toString();
-                                obj_found=true;
+                    for (int i = 0; i <accounts.size(); i++) {
+                        for (int j = 0; j <accounts.get(i).getOrders().size() ; j++) {
+                            for (int k = 0; k < accounts.get(i).getOrders().get(j).getLineItems().size(); k++) {
+                                if (Integer.toHexString(System.identityHashCode(accounts.get(i).getOrders().get(j).getLineItems().get(k))).equals(Obj_id)) {
+                                    final_obj = final_obj + accounts.get(i).getOrders().get(j).getLineItems().get(k).toString();
+                                    obj_found = true;
+                                }
                             }
+
                         }
 
                     }

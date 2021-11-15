@@ -17,6 +17,11 @@ public class Product
   private String id;
   private String name;
 
+
+
+  private int quantity;
+  private int price;
+
   //Product Associations
   private Supplier supplier;
   private PremiumAccount premiumAccount;
@@ -41,7 +46,13 @@ public class Product
   //------------------------
   // INTERFACE
   //------------------------
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
 
+  public void setPrice(int price) {
+    this.price = price;
+  }
   public boolean setId(String aId)
   {
     boolean wasSet = false;
@@ -133,7 +144,7 @@ public class Product
     return wasSet;
   }
   /* Code from template association_SetOptionalOneToMany */
-  public boolean setPremiumAccount(PremiumAccount aPremiumAccount)
+  public boolean setPremiumAccount(PremiumAccount aPremiumAccount,int quantity,int price)
   {
     boolean wasSet = false;
     PremiumAccount existingPremiumAccount = premiumAccount;
@@ -144,7 +155,7 @@ public class Product
     }
     if (aPremiumAccount != null)
     {
-      aPremiumAccount.addProduct(this);
+      aPremiumAccount.addProduct(this,quantity,price);
     }
     wasSet = true;
     return wasSet;
@@ -260,5 +271,13 @@ public class Product
       str = str + System.getProperties().getProperty("line.separator") + getLineItems().get(i).printObject();
     }
     return  str;
+  }
+
+  public int getQuantity() {
+    return quantity;
+  }
+
+  public int getPrice() {
+    return price;
   }
 }
