@@ -340,7 +340,7 @@ public class Order {
   }
 
   public String printObject() {
-    return this.getClass() + " " + this.getNumber() + " " + Integer.toHexString(System.identityHashCode(this));
+    return this.getClass() + " " + this.getNumber() + " " + "Unique System Id : " + Integer.toHexString(System.identityHashCode(this));
   }
 
   public void delete() {
@@ -373,14 +373,14 @@ public class Order {
 
   public String toString() {
     String str = "";
-    str = str + "number" + ":" + getNumber() + System.getProperties().getProperty("line.separator") +
-            "total" + ":" + getTotal() + System.getProperties().getProperty("line.separator") +
-            "orded" + "=" + (getOrded() != null ? !getOrded().equals(this) ? getOrded().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "shipped" + "=" + (getShipped() != null ? !getShipped().equals(this) ? getShipped().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "ship_to" + "=" + (getShip_to() != null ? !getShip_to().equals(this) ? getShip_to().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "status" + "=" + (getStatus() != null ? !getStatus().equals(this) ? getStatus().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+    str = str + "number" + ": " + getNumber() + System.getProperties().getProperty("line.separator") +
+            "total" + ": " + getTotal() + System.getProperties().getProperty("line.separator") +
+            "orded" + "= " + (getOrded() != null ? !getOrded().equals(this) ? getOrded().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "shipped" + "= " + (getShipped() != null ? !getShipped().equals(this) ? getShipped().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "ship_to" + "= " + (getShip_to() != null ? !getShip_to().equals(this) ? getShip_to().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "status" + "= " + (getStatus() != null ? !getStatus().equals(this) ? getStatus().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "account = " + (getAccount() != null ? Integer.toHexString(System.identityHashCode(getAccount())) : "null") + System.getProperties().getProperty("line.separator") +
-            "LineItems" + ":" + "\n" + "**************";
+            "LineItems" + ": " + "\n" + "**************";
     for (int i = 0; i < getLineItems().size(); i++) {
       str = str + "\n" + getLineItems().get(i).printObject();
     }

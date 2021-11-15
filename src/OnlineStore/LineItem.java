@@ -259,7 +259,7 @@ public class LineItem
     return quantity*price;
   }
   public String printObject(){
-    return this.getClass() + " " + this.getProduct().getId() + " " +  Integer.toHexString(System.identityHashCode(this));
+    return this.getClass() + " " + this.getProduct().getId() + " " + "Unique System Id : " +  Integer.toHexString(System.identityHashCode(this));
   }
 
 
@@ -268,8 +268,8 @@ public class LineItem
   {
     String str = "";
     str =str + super.toString() + System.getProperties().getProperty("line.separator") +
-            "quantity" + ":" + getQuantity()+ System.getProperties().getProperty("line.separator") +
-            "price" + ":" + getPrice() + System.getProperties().getProperty("line.separator") +
+            "quantity" + ": " + getQuantity()+ System.getProperties().getProperty("line.separator") +
+            "price" + ": " + getPrice() + System.getProperties().getProperty("line.separator") +
             "order = "+(getOrder()!=null?Integer.toHexString(System.identityHashCode(getOrder())):"null") + System.getProperties().getProperty("line.separator") +
             "product = "+(getProduct()!=null?Integer.toHexString(System.identityHashCode(getProduct())):"null") + System.getProperties().getProperty("line.separator") +
             "ShoppingCarts" + ":" + "\n" + "**************";

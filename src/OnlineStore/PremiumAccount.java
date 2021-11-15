@@ -137,6 +137,16 @@ public class PremiumAccount extends Account
     return wasAdded;
   }
 
+  @Override
+  public String toString() {
+    String str = super.toString() + "\n" + "Associated Products: " + "\n" + "****************" + "\n";
+    for (int i = 0; i <getProducts().size() ; i++) {
+      str = str  + getProducts().get(i).printObject() + "\n";
+
+    }
+    return str;
+  }
+
   public void delete()
   {
     while( !products.isEmpty() )

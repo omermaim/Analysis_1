@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.println("Welcome to the Machine\n");
-        Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(System.in).useDelimiter("\n");
         //create 3 data structers for products, accounts, users, and suppliers, and automatically adding users that they want us to add
         //*
         //*
@@ -57,6 +57,7 @@ public class Main {
         int choice;
         while (true) {
             System.out.println("Enter the number of the operation you would like to do:");
+            System.out.println("*** Our machine is case-sensitive ***");;
             System.out.println("1) Add user");
             System.out.println("2) Remove user");
             System.out.println("3) Login user");
@@ -79,6 +80,7 @@ public class Main {
 
                 case 1:
                     //Add user
+
                     System.out.println("Enter desired User ID");
                     id = input.next();
                     System.out.println("Enter desired password");
@@ -131,6 +133,9 @@ public class Main {
                             }
                             Users.get(i).getCustomer().getAccount().setClosed(new java.sql.Date(System.currentTimeMillis()));
                             Users.get(i).getCustomer().getAccount().setIs_closed(true);
+                            Users.get(i).getCustomer().getAccount().delete();
+                            accounts.remove(i);
+
                             Users.get(i).delete();
                             Users.remove(i);
 
@@ -212,6 +217,8 @@ public class Main {
                     //then we find the spcefic order using the orderid given to us. then we check if he already has this product in his order,
                     //if he does we only increase the quantity by 1 of the lineitem already inside , but if he doesnt we create a new lineitem and insert it with quantity 1 and price=50(no reason for the specific price)
                     //at last we calculate the total price of the order and add it to the datamember of the same order.
+
+                    if(loggedInUser!=null) {
                     System.out.println("Please enter Order ID ");
                     String orderid = input.next();
                     System.out.println("Please enter UserId to purchase from ");
@@ -221,7 +228,6 @@ public class Main {
                     boolean alreadyin=false;
                     Supplier purchasefrom = null;
                     Product product=null;
-                    if(loggedInUser!=null) {
                         for (int i = 0; i < suppliers.size(); i++) {
                             if (suppliers.get(i).getId().equals(userid)) {
                                 purchasefrom = suppliers.get(i);
@@ -256,19 +262,34 @@ public class Main {
                         }
 
                         }
+                    else{
+                        System.out.println("No User is logged in");
+                    }
 
                             break;
 
                 case 7:
                     //print the order, look at order tostring to see
-                    loggedInUser.getCustomer().getAccount().getOrders().get(loggedInUser.getCustomer().getAccount().getOrders().size()-1).CalculateTotal();
-                    System.out.println(loggedInUser.getCustomer().getAccount().getOrders().get(loggedInUser.getCustomer().getAccount().getOrders().size()-1).print());
+                if(loggedInUser!=null) {
+                    if (loggedInUser.getCustomer().getAccount().getOrders().size() > 0) {
+                        loggedInUser.getCustomer().getAccount().getOrders().get(loggedInUser.getCustomer().getAccount().getOrders().size() - 1).CalculateTotal();
+                        System.out.println(loggedInUser.getCustomer().getAccount().getOrders().get(loggedInUser.getCustomer().getAccount().getOrders().size() - 1).print());
+                    } else {
+                        System.out.println("User has no orders");
+                    }
+                }
+                else{
+                    System.out.println("No user logged in");
+                }
                             break;
 
                 case 8:
                             //Link Product *Product_Name* *Price* *Quantity*
                     // we need to check why they want to recieve price and quantity, they ask for a link between product to premieum account.
-                    if(loggedInUser.getCustomer().getAccount() instanceof PremiumAccount) {
+
+
+                if(loggedInUser!=null) {
+                    if (loggedInUser.getCustomer().getAccount() instanceof PremiumAccount) {
                         System.out.println("Please enter the product name ");
                         String productname = input.next();
                         System.out.println("Please enter Price");
@@ -276,18 +297,21 @@ public class Main {
                         System.out.println("Please enter Quantity");
                         String quantity = input.next();
                         for (int i = 0; i < products.size(); i++) {
-                            if(products.get(i).getName().equals(productname)){
-                                ((PremiumAccount)loggedInUser.getCustomer().getAccount()).addProduct(products.get(i));
+                            if (products.get(i).getName().equals(productname)) {
+                                ((PremiumAccount) loggedInUser.getCustomer().getAccount()).addProduct(products.get(i));
                                 System.out.println("link succesful");
                             }
 
                         }
 
 
-                    }
-                    else{
+                    } else {
                         System.out.println("We are sorry, you are not a Premiem User.");
                     }
+                }
+                else{
+                    System.out.println("No User logged in");
+                }
 
                             break;
 
@@ -386,7 +410,7 @@ public class Main {
 
                 case 12:
                             //show object
-                    System.out.println("Enter desired Object ID to show");
+                    System.out.println("Enter desired Unique System ID to show");
                     String Obj_id = input.next();
                     boolean obj_found = false;
                     String final_obj = "";

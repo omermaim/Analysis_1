@@ -233,7 +233,7 @@ public class ShopingCart
     }
   }
   public String printObject(){
-    return this.getClass() + " " + this.getAccount().getId() + " " +  Integer.toHexString(System.identityHashCode(this));
+    return this.getClass() + " " + this.getAccount().getId() + " " + "Unique System Id : " +  Integer.toHexString(System.identityHashCode(this));
   }
 
 
@@ -241,10 +241,10 @@ public class ShopingCart
   {
     String str = "";
     str = str +super.toString() +  System.getProperties().getProperty("line.separator") +
-            "created" + "=" + (getCreated() != null ? !getCreated().equals(this)  ? getCreated().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "created" + "= " + (getCreated() != null ? !getCreated().equals(this)  ? getCreated().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "user = "+(getUser()!=null?Integer.toHexString(System.identityHashCode(getUser())):"null") + System.getProperties().getProperty("line.separator") +
             "account = "+(getAccount()!=null?Integer.toHexString(System.identityHashCode(getAccount())):"null") + System.getProperties().getProperty("line.separator") +
-            "LineItems" + ":" + "\n" + "**************";
+            "LineItems" + ": " + "\n" + "**************";
     for (int i = 0; i < getLineItems().size(); i++) {
           str = str + System.getProperties().getProperty("line.separator") + getLineItems().get(i).printObject();
     }
