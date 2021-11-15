@@ -54,7 +54,7 @@ public class Main {
         Integer numoforders=0;
 
 
-        String choice;
+        Integer choice=-1;
         while (true) {
             System.out.println("Enter the number of the operation you would like to do:");
             System.out.println("*** Our machine is case-sensitive ***");;
@@ -72,10 +72,14 @@ public class Main {
             System.out.println("12) ShowObjectId");
             System.out.println("13) Exit");
 
-            choice = input.next();
+            choice = input.nextInt();
+
+
+
+
             String id, password, ans, address, phone_num, email, billing_address;
 
-            switch (Integer.parseInt(choice)) {
+            switch (choice) {
 
                 case 1:
                     //Add user
