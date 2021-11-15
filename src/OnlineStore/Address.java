@@ -1,4 +1,4 @@
-package com.company;
+package OnlineStore;
 
 public class Address {
     String address;

@@ -1,65 +1,40 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
-package com.company;
+package OnlineStore;
 
 import java.util.*;
+import java.sql.Date;
 
-// line 94 "model.ump"
-// line 180 "model.ump"
-public class Supplier
+// line 37 "model.ump"
+// line 139 "model.ump"
+public class PremiumAccount extends Account
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Supplier Attributes
-  private String id;
-  private String name;
-
-  //Supplier Associations
+  //PremiumAccount Associations
   private List<Product> products;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Supplier(String aId, String aName)
+  public PremiumAccount(String aId, String aBilling_address, boolean aIs_closed, int aBalance, Customer aCustomer, ShopingCart aShopingCart)
   {
-    id = aId;
-    name = aName;
+    super(aId, aBilling_address, aIs_closed, aBalance, aCustomer, aShopingCart);
+    products = new ArrayList<Product>();
+  }
+  public PremiumAccount(String aId, String aBilling_address, boolean aIs_closed, Date aOpen, Date aClosed, int aBalance, String aIdForCustomer, Address aAddressForCustomer, String aPhoneForCustomer, String aEmailForCustomer, Date aCreatedForShopingCart, User aUserForShopingCart)
+  {
+    super(aId, aBilling_address, aIs_closed, aOpen, aClosed, aBalance,aIdForCustomer ,aAddressForCustomer,aPhoneForCustomer,aEmailForCustomer,aCreatedForShopingCart,aUserForShopingCart );
     products = new ArrayList<Product>();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setId(String aId)
-  {
-    boolean wasSet = false;
-    id = aId;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setName(String aName)
-  {
-    boolean wasSet = false;
-    name = aName;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public String getId()
-  {
-    return id;
-  }
-
-  public String getName()
-  {
-    return name;
-  }
   /* Code from template association_GetMany */
   public Product getProduct(int index)
   {
@@ -95,21 +70,20 @@ public class Supplier
   {
     return 0;
   }
-  /* Code from template association_AddManyToOne */
-  public Product addProduct(String aId, String aName)
-  {
-    return new Product(aId, aName, this);
-  }
-
+  /* Code from template association_AddManyToOptionalOne */
   public boolean addProduct(Product aProduct)
   {
     boolean wasAdded = false;
     if (products.contains(aProduct)) { return false; }
-    Supplier existingSupplier = aProduct.getSupplier();
-    boolean isNewSupplier = existingSupplier != null && !this.equals(existingSupplier);
-    if (isNewSupplier)
+    PremiumAccount existingPremiumAccount = aProduct.getPremiumAccount();
+    if (existingPremiumAccount == null)
     {
-      aProduct.setSupplier(this);
+      aProduct.setPremiumAccount(this);
+    }
+    else if (!this.equals(existingPremiumAccount))
+    {
+      existingPremiumAccount.removeProduct(aProduct);
+      addProduct(aProduct);
     }
     else
     {
@@ -122,10 +96,10 @@ public class Supplier
   public boolean removeProduct(Product aProduct)
   {
     boolean wasRemoved = false;
-    //Unable to remove aProduct, as it must always have a supplier
-    if (!this.equals(aProduct.getSupplier()))
+    if (products.contains(aProduct))
     {
       products.remove(aProduct);
+      aProduct.setPremiumAccount(null);
       wasRemoved = true;
     }
     return wasRemoved;
@@ -165,28 +139,11 @@ public class Supplier
 
   public void delete()
   {
-    for(int i=products.size(); i > 0; i--)
+    while( !products.isEmpty() )
     {
-      Product aProduct = products.get(i - 1);
-      aProduct.delete();
+      products.get(0).setPremiumAccount(null);
     }
-  }
-  public String printObject(){
-    return this.getClass() + " " + this.getId() + " " +  Integer.toHexString(System.identityHashCode(this));
+    super.delete();
   }
 
-
-  public String toString()
-  {
-    String str = "";
-    str = str + super.toString() + System.getProperties().getProperty("line.separator") +
-            "id" + ":" + getId()+  System.getProperties().getProperty("line.separator") +
-            "name" + ":" + getName()+ System.getProperties().getProperty("line.separator") +
-            "Products" + ":" + "\n" + "**************";
-    for (int i = 0; i < getProducts().size(); i++) {
-      str = str + "\n" + getProducts().get(i).printObject();
-
-    }
-    return str;
-  }
 }

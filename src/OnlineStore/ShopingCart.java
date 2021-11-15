@@ -1,10 +1,10 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
-package com.company;
+package OnlineStore;
 
 import java.sql.Date;
 import java.util.*;
-import com.company.*;
+
 
 // line 18 "model.ump"
 // line 125 "model.ump"
