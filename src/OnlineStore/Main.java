@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.println("Welcome to the Machine\n");
-        Scanner input = new Scanner(System.in).useDelimiter("\n");
+        Scanner input = new Scanner(System.in);
         //create 3 data structers for products, accounts, users, and suppliers, and automatically adding users that they want us to add
         //*
         //*
@@ -54,7 +54,7 @@ public class Main {
         Integer numoforders=0;
 
 
-        Integer choice;
+        int choice;
         while (true) {
             System.out.println("Enter the number of the operation you would like to do:");
             System.out.println("*** Our machine is case-sensitive ***");;
@@ -73,6 +73,7 @@ public class Main {
             System.out.println("13) Exit");
 
             choice = input.nextInt();
+            input.nextLine();
 
 
 
@@ -85,19 +86,19 @@ public class Main {
                     //Add user
 
                     System.out.println("Enter desired User ID");
-                    id = input.next();
+                    id = input.nextLine();
                     System.out.println("Enter desired password");
-                    password = input.next();
+                    password = input.nextLine();
                     System.out.println("Enter customer address");
-                    address = input.next();
+                    address = input.nextLine();
                     System.out.println("Enter customer phone number");
-                    phone_num = input.next();
+                    phone_num = input.nextLine();
                     System.out.println("Enter customer email");
-                    email = input.next();
+                    email = input.nextLine();
                     System.out.println("Enter account billing address");
-                    billing_address = input.next();
+                    billing_address = input.nextLine();
                     System.out.println("Would you like to upgrade to premium account?\nIf you do enter Y");
-                    ans = input.next();
+                    ans = input.nextLine();
                     //create a new user by the information provided
 
 
@@ -124,7 +125,7 @@ public class Main {
 
                 case 2:
                     System.out.println("Enter desired User ID to remove");
-                    id = input.next();
+                    id = input.nextLine();
                     //check if the User ID exists and remove it, need to check that the delete method works as it deletes
                     // also the account,customer and shopping cart associated with the deleted user
 
@@ -149,9 +150,9 @@ public class Main {
                 case 3:
                     //login user
                     System.out.println("Enter User ID");
-                    id = input.next();
+                    id = input.nextLine();
                     System.out.println("Enter User password");
-                    password = input.next();
+                    password = input.nextLine();
                     //check if there is a user logged in,if there is automatically print that there is a user
                     //if no one is logged in check that the infromation given applies to one of our users
                     boolean found = false;
@@ -175,7 +176,7 @@ public class Main {
                 case 4:
                     // log out
                     System.out.println("Enter User ID");
-                    id = input.next();
+                    id = input.nextLine();
                     //check if user is logged in and if he is change LoggedINuser to null
                     if (loggedInUser.getLogin_id().equals(id)) {
                         loggedInUser = null;
@@ -191,7 +192,7 @@ public class Main {
 
                     if (loggedInUser != null) {
                         System.out.println("Please enter address to send to ");
-                        address = input.next();
+                        address = input.nextLine();
                         numoforders++;
 
                        loggedInUser.getCustomer().getAccount().addOrder(numoforders.toString(), new java.sql.Date(System.currentTimeMillis()), new Address(address));
@@ -221,11 +222,11 @@ public class Main {
 
                     if(loggedInUser!=null) {
                     System.out.println("Please enter Order ID ");
-                    String orderid = input.next();
+                    String orderid = input.nextLine();
                     System.out.println("Please enter UserId to purchase from ");
-                    String userid = input.next();
+                    String userid = input.nextLine();
                     System.out.println("Please enter product to purchase ");
-                    String product_name = input.next();
+                    String product_name = input.nextLine();
                     boolean alreadyin=false;
                     PremiumAccount purchasefrom = null;
                     Product product=null;
@@ -335,11 +336,11 @@ public class Main {
                 if(loggedInUser!=null) {
                     if (loggedInUser.getCustomer().getAccount() instanceof PremiumAccount) {
                         System.out.println("Please enter the product name ");
-                        String productname = input.next();
+                        String productname = input.nextLine();
                         System.out.println("Please enter Price");
-                        String price = input.next();
+                        String price = input.nextLine();
                         System.out.println("Please enter Quantity");
-                        String quantity = input.next();
+                        String quantity = input.nextLine();
                         for (int i = 0; i < products.size(); i++) {
                             if (products.get(i).getName().equals(productname)) {
                                 ((PremiumAccount) loggedInUser.getCustomer().getAccount()).addProduct(products.get(i),Integer.parseInt(quantity),Integer.parseInt(price));
@@ -362,9 +363,9 @@ public class Main {
                 case 9:
                             //Add Product
                     System.out.println("Please enter the new products name ");
-                    String newname = input.next();
+                    String newname = input.nextLine();
                     System.out.println("Please enter the supplier that provides it");
-                    String sup_name = input.next();
+                    String sup_name = input.nextLine();
                     boolean found_sup = false;
                     for (int i = 0; i < suppliers.size() ; i++) {
                         if(suppliers.get(i).getName().equals(sup_name)){
@@ -385,7 +386,7 @@ public class Main {
                 case 10:
                             //Delete product
                     System.out.println("Please enter the product you want to delete");
-                    String prod_delete = input.next();
+                    String prod_delete = input.nextLine();
                     boolean found_del = false;
                     for (int i = 0; i < products.size() ; i++) {
                         if(products.get(i).getName().equals(prod_delete)){
@@ -461,7 +462,7 @@ public class Main {
                 case 12:
                             //show object
                     System.out.println("Enter desired Unique System ID to show");
-                    String Obj_id = input.next();
+                    String Obj_id = input.nextLine();
                     boolean obj_found = false;
                     String final_obj = "";
 
