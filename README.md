@@ -50,6 +50,10 @@ once you run the program you will recieve a menu with this options:
 11. ShowObjectId 
     input :*id*
     shows the details of the object with the unique id inserted.
+    
+    
+ this project was made to show how to create a project in java from a class diagram when all constraints and goals of the class diagram are met. this can also be a 
+ good base for a general online store system.
 
 
 
